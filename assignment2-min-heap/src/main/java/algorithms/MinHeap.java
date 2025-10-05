@@ -117,20 +117,25 @@ public class MinHeap {
             int left = left(i);
             int right = right(i);
             int smallest = i;
+            int smallestVal = heap[smallest];
+            tracker.incrementArrayAccess(); //Read initial smallest
+            
             if (left <= size) {
+                int leftVal = heap[left];
                 tracker.incrementArrayAccess(); // Read left
-                tracker.incrementArrayAccess(); // Read smallest
                 tracker.incrementComparison();
-                if (heap[left] < heap[smallest]) {
+                if (leftVal < smallestVal) {
                     smallest = left;
+                    smallestVal = leftVal;
                 }
             }
             if (right <= size) {
+                int rightVal = heap[right];
                 tracker.incrementArrayAccess(); // Read right
-                tracker.incrementArrayAccess(); // Read smallest
                 tracker.incrementComparison();
-                if (heap[right] < heap[smallest]) {
+                if (rightVal < smallestVal) {
                     smallest = right;
+                    smallestVal = rightVal;
                 }
             }
             if (smallest != i) {
@@ -161,9 +166,10 @@ public class MinHeap {
         heap[i] = heap[j];
         heap[j] = temp;
         tracker.incrementSwap();
-        tracker.incrementArrayAccess(); // 3 accesses for swap
-        tracker.incrementArrayAccess();
-        tracker.incrementArrayAccess();
+        tracker.incrementArrayAccess(); // Read i
+        tracker.incrementArrayAccess(); // Read j
+        tracker.incrementArrayAccess(); // Write i
+        tracker.incrementArrayAccess(); // Write j
     }
 
     private int parent(int i) {
